@@ -116,6 +116,7 @@ section{position:relative;z-index:2}
 .sub-head span{font-family:var(--lat);font-size:.66rem;letter-spacing:.3em;color:var(--stone);text-transform:uppercase}
 
 .concept{background:var(--paper-2);text-align:center}
+@media(min-width:961px){#concept.pad{padding-top:clamp(5rem,7.5vw,6.5rem);padding-bottom:clamp(5rem,7.5vw,6.5rem)}#service.pad{padding-top:clamp(5rem,7.5vw,6.5rem)}}
 .concept .lead{font-family:var(--serif);font-weight:500;font-size:clamp(1.3rem,3.2vw,2rem);line-height:2.1;letter-spacing:.09em;margin:1.4em 0}
 .concept .body{max-width:40em;margin:0 auto;color:var(--body);font-weight:400}
 @media(max-width:640px){.br-pc{display:none}}
@@ -133,11 +134,12 @@ section{position:relative;z-index:2}
 /* business blocks */
 .biz{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;scroll-margin-top:90px}
 .biz + .biz{margin-top:clamp(3rem,6vw,5.5rem)}
-.biz .b-media{position:relative;height:0;padding-top:75%;align-self:center;overflow:hidden}
+.biz .b-media{position:relative;height:0;padding-top:75%;align-self:start;overflow:hidden}
 .biz .b-body{padding:clamp(2rem,5vw,4.5rem);display:flex;flex-direction:column;justify-content:center}
+@media(min-width:961px){.biz + .biz{margin-top:clamp(5rem,8vw,7.5rem)}.biz .b-body{padding-top:0;padding-bottom:0;justify-content:flex-start}.biz .b-num{line-height:1;display:block;margin-top:-.1em}}
 .biz.reverse .b-media{order:2}
-.biz .b-num{font-family:var(--lat);font-weight:300;font-size:.8rem;letter-spacing:.3em;color:var(--stone)}
-.biz h3{font-family:var(--serif);font-weight:700;font-size:clamp(1.6rem,3.4vw,2.3rem);letter-spacing:.06em;margin:.8rem 0 .3rem;line-height:1.5}
+.biz .b-num{display:block;line-height:1.4;font-family:var(--lat);font-weight:300;font-size:.8rem;letter-spacing:.3em;color:var(--stone)}
+.biz h3{font-family:var(--serif);font-weight:700;font-size:clamp(1.6rem,3.4vw,2.3rem);letter-spacing:.06em;margin:.25rem 0 .3rem;line-height:1.3}
 .biz h3 .en{display:block;font-family:var(--lat);font-weight:300;font-size:.72rem;letter-spacing:.28em;color:var(--sand);text-transform:uppercase;margin-top:.7em}
 .biz.senior h3 .en{color:var(--sage)}
 .biz p{color:var(--body);font-weight:400;font-size:1rem;line-height:2;letter-spacing:.03em;margin:1.4rem 0 1.6rem;max-width:30em}
