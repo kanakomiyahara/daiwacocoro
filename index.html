@@ -636,8 +636,20 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
 #service.pad{padding-top:clamp(2.8rem,5vw,4.2rem)}
 /* スマホ：SCROLL表示がボタンと重なるので隠す */
 @media(max-width:960px){.hero-scroll{display:none!important}}
+/* 箇条書き：罫線をなくし、チェック付きのまとまりに */
+.biz ul,.tdx-body ul{border-top:0!important;background:var(--card);border-radius:4px;padding:1.1rem 1.3rem;display:grid;gap:.6rem}
+.tdx-body ul{background:var(--paper)}
+.biz li,.tdx-body li{border-bottom:0!important;padding:0 0 0 1.8em!important;line-height:1.7}
+.biz li::before,.tdx-body li::before{left:.3em!important;top:.28em!important;width:.42em!important;height:.78em!important;background:none!important;border:solid var(--sand);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.biz.senior li::before{border-color:var(--sage)}
+/* 「〜について相談する」をボタンに */
+.link-more{display:inline-flex;align-items:center;justify-content:center;gap:.9em;background:var(--ink);color:var(--paper);border:0!important;padding:1.05em 2.1em!important;font-family:var(--sans);font-weight:500;letter-spacing:.12em;font-size:.86rem;text-transform:none;border-radius:2px;transition:background .3s,gap .3s}
+.link-more:hover{background:var(--ink-2);gap:1.3em}
+.link-more.sn-3d{background:transparent;color:var(--ink);border:1px solid var(--ink)!important;padding:.85em 1.5em!important;font-size:.82rem}
+.link-more.sn-3d:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:640px){.link-more{align-self:stretch;letter-spacing:.05em;padding:1em 1.1em!important;gap:.7em}.tdx-body{padding:1.4rem 1.2rem 1.6rem}.tdx-body .link-more{font-size:.8rem;letter-spacing:.02em}}
 /* 代表挨拶のサイン（スマホ） */
-@media(max-width:640px){.message .sign{padding-right:2.4rem}.message .sign .sign-img{width:160px}}
+@media(max-width:640px){.message .sign{padding-right:.6rem}.message .sign .sign-img{width:160px}.message .m-body p:not(.m-em){text-align:justify;text-justify:inter-character}}
 </style>
 </head>
 <body>
