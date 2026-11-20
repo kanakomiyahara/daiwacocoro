@@ -187,7 +187,6 @@ body.menu-open .burger span:last-child{transform:translateY(-3.5px) rotate(-45de
 /* SUUMO未掲載の物件（落ち着いたトーン・お問い合わせへ） */
 .pk-post.ask{border-color:var(--line)}
 .pk-post.ask .pk-img{border-bottom-color:var(--sand)}
-.pk-post.ask .pk-badge{background:var(--sage)}
 .pk-post.ask .pk-info{background:var(--card)}
 .pk-post.ask .pk-name{color:var(--ink);text-decoration:none}
 .pk-post.ask .pk-price{color:#8C5E3C}
@@ -664,6 +663,27 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
 .tdx-play-tx{background:rgba(255,255,255,.95)!important;color:var(--ink)!important;margin:0 0 0 -2.9rem!important;padding:.62em 1.3em .62em 3.5rem!important;height:46px;display:flex!important;align-items:center!important;box-shadow:0 6px 18px rgba(26,23,18,.16);font-weight:500;letter-spacing:.08em}
 .tdx-play-tx small{color:var(--stone);opacity:1!important}
 .tdx-play:hover .tdx-play-tx{background:#fff!important}
+/* PC：写真の下に箇条書き・ボタンを置き、左右の高さのバランスをとる */
+.b-aside{display:flex;flex-direction:column}
+@media(min-width:961px){
+  .biz{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;grid-template-areas:"media body" "aside body"}
+  .biz.reverse{grid-template-areas:"body media" "body aside"}
+  .biz .b-media{grid-area:media}
+  .biz .b-body{grid-area:body}
+  .biz .b-aside{grid-area:aside;padding-top:clamp(1.8rem,2.6vw,2.4rem)}
+  .biz .b-aside ul{margin-bottom:1.6rem}
+  .biz .b-aside .b-catch{margin-top:0!important}
+  /* シニア事業部：後半（思い出の詰まった〜）は2カラムの下に1カラムで */
+  .biz.senior{grid-template-rows:auto auto;grid-template-areas:"body media" "aside aside"}
+  .biz.senior .b-aside{max-width:820px;width:100%;margin:clamp(2.6rem,4vw,3.6rem) auto 0;padding:clamp(2.2rem,3.5vw,3rem) 0 0;border-top:1px solid var(--line)}
+  .biz.senior .b-aside .b-text,.biz.senior .b-aside .b-text p{max-width:none}
+  .biz.senior .b-aside .b-text p{font-size:.95rem}
+  .biz.senior .b-aside .link-more{align-self:flex-start}
+  .biz + .biz{margin-top:clamp(5.5rem,8vw,7.5rem)}
+}
+@media(max-width:960px){.biz .b-aside{order:5}}
+/* PC：シニアの写真ブロックの空きを詰める（上の空を少しトリミング） */
+@media(min-width:961px){.sn-visual.has-photo{min-height:min(56.25vw,calc(22vw + 500px))!important}}
 /* 代表挨拶のサイン（スマホ） */
 @media(max-width:640px){.message .sign{padding-right:.6rem}.message .sign .sign-img{width:136px}.message .m-body p:not(.m-em){text-align:justify;text-justify:inter-character}}
 </style>
@@ -807,6 +827,8 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
           <p>居住用・事業用・投資用不動産まで幅広く対応し、住み替えや相続に伴う売却のご相談も承ります。</p>
           <p>目先のお取引だけでなく、その先の暮らしや資産形成を見据え、お客様が安心して次の一歩を踏み出せるよう、一つひとつのお取引に誠実に向き合います。</p>
         </div>
+      </div>
+      <div class="b-aside">
         <ul>
           <li>無料売却査定・買取りのご相談</li>
           <li>新築戸建・中古マンション・土地の購入サポート<span class="li-note">※一般公開される前の物件も、選択肢のひとつに。</span></li>
@@ -829,6 +851,8 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
           <p>さらに、周辺の生活環境や利便性、契約・制度面など、さまざまな視点から、その住まいが本当にお客様に合っているのかを一緒に考えます。</p>
           <p>物件をご案内して終わりではなく、「その部屋で、これからどう暮らすか」まで見据えた住まい選びをお手伝いします。</p>
         </div>
+      </div>
+      <div class="b-aside">
         <ul>
           <li>居住用・事業用のお部屋探し</li>
           <li>空室の入居者募集・賃料査定</li>
@@ -854,6 +878,8 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
           <p>そんなお悩みにも、売買・賃貸・管理の視点から選択肢を一緒に考え、ご希望に沿った方法をご提案いたします。</p>
           <p>オーナー様のご負担やご不安を少しでも軽くし、大切な不動産を安心して次の未来へつなげられるよう、誠実に向き合ってまいります。</p>
         </div>
+      </div>
+      <div class="b-aside">
         <ul>
           <li>賃料集金・滞納対応・契約更新</li>
           <li>入居者からの問い合わせ・トラブル対応</li>
@@ -875,6 +901,8 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
           <p>まだ元気なうちに、これからを考えておきたい方もいれば、暮らしの変化をきっかけに、今すぐ住まいを考えたい方もいらっしゃいます。</p>
           <p>私たちは、その時々のお悩みや状況に寄り添い、ご本人とご家族にとって必要なことを一緒に整理し、その方に合った選択肢をご提案します。</p>
         </div>
+      </div>
+      <div class="b-aside">
         <p class="b-catch">思い出の詰まったご自宅を、<br>これからの安心につなぐ。</p>
         <div class="b-text">
           <p>長年暮らしてきたご自宅を手放すことは、簡単に決められるものではありません。</p>
