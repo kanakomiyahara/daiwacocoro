@@ -318,7 +318,7 @@ section{position:relative;z-index:2}
 .message .m-photo{position:sticky;top:120px;aspect-ratio:4/5;margin:0 18px 18px 0}
 .message .m-photo::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:1px solid var(--sand);opacity:.55}
 .message .m-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 60%}
-.message .m-body{max-width:36em}
+.message .m-body{max-width:none}
 .message h4{font-family:var(--serif);font-size:clamp(1.3rem,2.8vw,1.8rem);font-weight:700;letter-spacing:.08em;line-height:1.8;margin-bottom:1.4rem}
 .message p{color:var(--body);font-weight:400;margin-bottom:1.2em}
 .message .m-em{font-family:var(--serif);font-weight:500;color:#8A6A43!important;line-height:2;margin:1.8em 0!important}
@@ -588,6 +588,56 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
   .xpost{width:280px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
+/* ===== 2026-11-20 調整 ===== */
+/* 物件エリア：下の余白を詰める */
+.pk-note:empty,.pk-foot[hidden]{display:none}
+.pk{padding-bottom:clamp(1.8rem,3.5vw,2.6rem)}
+#concept.pad{padding-top:clamp(3.4rem,6vw,5rem)}
+/* サービス各項目の番号見出しを目立たせる */
+.biz .b-num{display:flex!important;align-items:center;gap:.7em;font-family:var(--serif);font-weight:600;font-size:clamp(2.3rem,4.4vw,3rem);line-height:1!important;letter-spacing:.04em;color:#9A7550;margin:0 0 .5rem!important}
+.biz .b-num::after{content:"";flex:none;width:clamp(40px,5vw,64px);height:1px;background:currentColor;opacity:.7}
+.biz.senior .b-num{color:#5E6B58}
+.biz .b-num::before{content:"SERVICE";order:2;font-family:var(--lat);font-weight:400;font-size:.62rem;letter-spacing:.3em;color:currentColor;opacity:.85}
+.biz .b-num::after{order:1}
+.biz h3{font-size:clamp(1.8rem,3.8vw,2.5rem)}
+@media(max-width:960px){
+  .biz .b-body{padding-top:1.6rem}
+  .biz + .biz{margin-top:3.4rem;padding-top:3.4rem;border-top:1px solid var(--line)}
+}
+/* スマホ：サービス見出し（番号＋サービス名）を写真の上に出して表題らしく */
+@media(max-width:960px){
+  .biz{display:flex;flex-direction:column}
+  .biz .b-body{display:contents}
+  .biz .b-num{order:1}
+  .biz h3{order:2;margin-bottom:1.3rem!important}
+  .biz .b-media,.biz.reverse .b-media{order:3!important;align-self:stretch;margin-bottom:.4rem}
+  .biz .b-body>*:not(.b-num):not(h3){order:4}
+  .biz .b-num{font-size:2.6rem}
+  .biz h3{font-size:2rem}
+}
+/* 物件エリア〜Conceptの余白（さらに詰める） */
+.pk-rail{padding-bottom:.6rem}
+.pk{padding-bottom:clamp(1.2rem,2.5vw,2rem)}
+#concept.pad{padding-top:clamp(2.6rem,5vw,4rem)}
+/* 地図〜お問い合わせの余白を詰める（PC・スマホ） */
+#company.pad{padding-bottom:clamp(2.4rem,4vw,3.6rem)}#contact.pad{padding-top:clamp(3rem,5vw,4.4rem)}
+/* セクション見出し：「サービス ── SERVICE」を1行にまとめる */
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:1.1rem;row-gap:0}
+.sec-head.center{justify-content:center}
+.sec-head h2{order:1;margin:0!important}
+.sec-head .eyebrow{order:2}
+.sec-head .desc{order:3;flex-basis:100%;margin-top:.9em}
+.sec-head .eyebrow::before{width:26px}
+.sec-head::after{content:"";order:3;flex-basis:100%;height:0}
+.sec-head .desc{order:4}
+/* Concept下の写真〜サービス見出しの余白を詰める */
+#concept.pad{padding-bottom:clamp(1.8rem,3.5vw,2.8rem)}
+#service.pad{padding-top:clamp(2.8rem,5vw,4.2rem)}
+/* スマホ：SCROLL表示がボタンと重なるので隠す */
+@media(max-width:960px){.hero-scroll{display:none!important}}
+/* 代表挨拶のサイン（スマホ） */
+@media(max-width:640px){.message .sign{padding-right:2.4rem}.message .sign .sign-img{width:160px}}
 </style>
 </head>
 <body>
@@ -1217,7 +1267,7 @@ const pkRender=(list,note)=>{let items=list.filter(p=>p['物件名']&&isOn(p['�
   document.getElementById('pkNav').style.visibility=items.length>1?'':'hidden';
   document.getElementById('pkNote').textContent=note||'';};
 const pkAll=document.getElementById('pkAll');pkAll.href=SUUMO_ALL;
-if(SUUMO_ALL==='#')pkAll.hidden=true; // 会社ページURLが決まるまでボタンを隠す
+if(SUUMO_ALL==='#'){pkAll.hidden=true;pkAll.closest('.pk-foot').hidden=true} // 会社ページURLが決まるまでボタンを隠す
 if(!SHEET_CSV){pkRender(PK_LIST)}
 else{fetch(SHEET_CSV+(SHEET_CSV.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'})
   .then(r=>{if(!r.ok)throw r.status;return r.text()}).then(t=>pkRender(parseCSV(t)))
