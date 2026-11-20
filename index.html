@@ -6,6 +6,15 @@
 <title>株式会社ダイワココロ｜DAIWACOCORO</title>
 <meta name="description" content="東京23区の不動産の売買・賃貸・管理、そしてシニアの住まいのご相談まで。住まいの時間そのぜんぶに寄り添う、ダイワココロ。">
 <meta name="theme-color" content="#17150F">
+<!-- 募集中の物件：スプレッドシートをページの読み込み開始と同時に取りに行く（表示を早くするため） -->
+<link rel="preconnect" href="https://docs.google.com" crossorigin>
+<link rel="dns-prefetch" href="https://docs.googleusercontent.com">
+<script>
+// ▼ 掲載物件スプレッドシート（「ウェブに公開」→ CSV のURL）。変えるときはここだけ
+window.PK_SHEET_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vSIbTvUBsu66IuhAm913TYo_O6qUQjRkfFO6I6s6dQQN48u1JpQgxBk-_qUdJ32fP0RE2w2LfbJ3wma/pub?gid=0&single=true&output=csv';
+window.PK_FETCH=window.PK_SHEET_CSV?fetch(window.PK_SHEET_CSV+'&t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw r.status;return r.text()}):null;
+if(window.PK_FETCH)window.PK_FETCH.catch(()=>{});
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1232,7 +1241,7 @@ document.querySelectorAll('.filter button').forEach(b=>b.addEventListener('click
 // ▼ 設定はこの2行だけ
 //   SHEET_CSV : シートを「ウェブに公開」→ CSV で発行したURL（空のあいだはサンプル表示）
 //   SUUMO_ALL : SUUMOの会社ページのURL
-const SHEET_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vSIbTvUBsu66IuhAm913TYo_O6qUQjRkfFO6I6s6dQQN48u1JpQgxBk-_qUdJ32fP0RE2w2LfbJ3wma/pub?gid=0&single=true&output=csv';
+const SHEET_CSV=window.PK_SHEET_CSV||''; // URLはページ先頭（<head>内）の PK_SHEET_CSV で設定
 const SUUMO_ALL='#';
 // ============================================================
 // 掲載物件（スプレッドシート未設定のあいだはここを表示）
@@ -1287,10 +1296,14 @@ const pkRender=(list,note)=>{let items=list.filter(p=>p['物件名']&&isOn(p['�
   document.getElementById('pkNote').textContent=note||'';};
 const pkAll=document.getElementById('pkAll');pkAll.href=SUUMO_ALL;
 if(SUUMO_ALL==='#'){pkAll.hidden=true;pkAll.closest('.pk-foot').hidden=true} // 会社ページURLが決まるまでボタンを隠す
+// 前回表示した物件をすぐに出し、最新のスプレッドシートが届いたら差し替える
+const PK_CACHE='pkCSV_v1';
 if(!SHEET_CSV){pkRender(PK_LIST)}
-else{fetch(SHEET_CSV+(SHEET_CSV.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'})
-  .then(r=>{if(!r.ok)throw r.status;return r.text()}).then(t=>pkRender(parseCSV(t)))
-  .catch(()=>pkRender([]))}
+else{let cached=null;try{cached=localStorage.getItem(PK_CACHE)}catch(e){}
+  if(cached)pkRender(parseCSV(cached));
+  (window.PK_FETCH||fetch(SHEET_CSV+(SHEET_CSV.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw r.status;return r.text()}))
+  .then(t=>{try{localStorage.setItem(PK_CACHE,t)}catch(e){}if(t!==cached)pkRender(parseCSV(t))})
+  .catch(()=>{if(!cached)pkRender([])})}
 // 「詳細はお問い合わせ」→ フォームに物件名を入れる
 pkRail.addEventListener('click',e=>{const a=e.target.closest('.pk-btn.ask');if(!a)return;
   const r=document.querySelector('#typeChips input[value="その他"]');if(r)r.checked=true;
