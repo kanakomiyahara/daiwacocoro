@@ -196,6 +196,19 @@ body.menu-open .burger span:last-child{transform:translateY(-3.5px) rotate(-45de
 .pk-btn.ask{display:block;background:var(--sand);color:#fff;box-shadow:0 3px 0 #86683F}
 .pk-btn.ask:hover{background:#B39068}
 .pk-btn.ask:active{transform:translateY(2px);box-shadow:0 1px 0 #86683F}
+.pk-post.ask .pk-noimg{background:var(--paper-2);color:var(--stone)}
+.pk-post.ask .pk-badge{background:var(--sand)}
+/* アットホーム掲載の物件（赤系） */
+.pk-post.at{border-color:#F1CBC6}
+.pk-post.at .pk-img{border-bottom-color:#E0301E}
+.pk-post.at .pk-noimg{background:#FCEDEA;color:#C9897F}
+.pk-post.at .pk-info{background:#FFF6F4}
+.pk-post.at .pk-name{color:#C8261A}
+.pk-post.at .pk-dl{border-top-color:#EDB9B1}
+.pk-post.at .pk-cm{border-left-color:#E0301E}
+.pk-btn.at{display:block;background:#E0301E;color:#fff;box-shadow:0 3px 0 #A8200F}
+.pk-btn.at:hover{background:#EC4A38}
+.pk-btn.at:active{transform:translateY(2px);box-shadow:0 1px 0 #A8200F}
 /* ---------- sections ---------- */
 section{position:relative;z-index:2}
 .pad{padding:clamp(5rem,11vw,9rem) 0}
@@ -813,7 +826,7 @@ footer{background:var(--ink);color:#b7ae9c;padding:4.5rem 0 2rem;position:relati
         <span class="pk-x pk-home" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11.2 12 4l9 7.2M5.5 9.4V20h13V9.4M10 20v-5.5h4V20"/></svg></span>
         <div>
           <h2 id="pk-ttl">ただいま募集中の物件</h2>
-          <p>おすすめの物件をご紹介しています。詳しい情報は一部SUUMOでご覧いただけます。その他詳細はお問い合わせください。</p>
+          <p>おすすめの物件をご紹介しています。詳しい情報は一部SUUMO・アットホームでご覧いただけます。その他詳細はお問い合わせください。</p>
         </div>
       </div>
       <div class="pk-nav" id="pkNav" aria-hidden="true">
@@ -1404,20 +1417,39 @@ const isOn=v=>!/^(×|x|ｘ|no|false|0|非掲載|非表示)$/i.test((v||'').trim(
 
 const pkRail=document.getElementById('pkRail');
 // SUUMOのURLが空欄の物件は「お問い合わせ」用のカード（落ち着いたトーン）で表示
-const pkCard=p=>{const img=imgUrl(p['写真URL']||''),su=safeUrl(p['SUUMOのURL']||''),ask=!su||su==='#',link=su;
-  return `<article class="pk-post${ask?' ask':''}">
+const pkCard=p=>{const img=imgUrl(p['写真URL']||''),su0=safeUrl(p['SUUMOのURL']||''),at=safeUrl(p['アットホームのURL']||''),su=su0&&su0!=='#'?su0:'',ask=!su&&!at,link=at||su;
+  return `<article class="pk-post${ask?' ask':at?' at':''}">
     <div class="pk-img${img?'':' pk-noimg'}" ${img?`style="background-image:url('${esc(img)}')"`:''} role="img" aria-label="${esc(p['物件名'])}の写真">${img?'':'写真準備中'}${p['ラベル']?`<span class="pk-badge">${esc(p['ラベル'])}</span>`:''}</div>
     <div class="pk-info">
       ${ask?`<span class="pk-name">${esc(p['物件名'])}</span>`:`<a class="pk-name" href="${esc(link)}" target="_blank" rel="noopener">${esc(p['物件名'])}</a>`}
       ${p['価格']?`<p class="pk-price">${yen(p['価格'])}</p>`:''}
       <dl class="pk-dl">${['所在地','沿線・駅','間取り・面積'].filter(k=>p[k]).map(k=>`<dt>${k==='間取り・面積'?'間取り':k}</dt><dd>${esc(p[k])}</dd>`).join('')}</dl>
       ${p['ひとこと']?`<p class="pk-cm">${esc(p['ひとこと'])}</p>`:''}
-      <div class="pk-btns">${ask?`<a class="pk-btn ask" href="#contact" data-pk-name="${esc(p['物件名'])}">詳細はお問い合わせ</a>`:`<a class="pk-btn su" href="${esc(link)}" target="_blank" rel="noopener">SUUMOで詳しく見る</a>`}</div>
+      <div class="pk-btns">${ask?`<a class="pk-btn ask" href="#contact" data-pk-name="${esc(p['物件名'])}">詳細はお問い合わせ</a>`:at?`<a class="pk-btn at" href="${esc(link)}" target="_blank" rel="noopener">アットホームで詳しく見る</a>`:`<a class="pk-btn su" href="${esc(link)}" target="_blank" rel="noopener">SUUMOで詳しく見る</a>`}</div>
     </div></article>`};
 // ▼ デザイン確認用のダミー：チュリス赤坂と同じ内容で、SUUMOリンクなしのカードを隣に表示
 //   確認が終わったら PK_DUMMY を false にしてください
-const PK_DUMMY=true;
+const PK_DUMMY=false;
+// ▼ スプレッドシートにまだ無い物件（シートに同じ物件名が追加されたら、シート側の内容が優先されます）
+//   リンク先の種類： SUUMOのURL → 緑（SUUMO風）／ アットホームのURL → 赤（アットホーム風）／ どちらも空 → ベージュ（お問い合わせ）
+const PK_EXTRA=[
+  {'掲載':'○','ラベル':'募集準備中','物件名':'三田ガーデンヒルズ','価格':'',
+   '所在地':'東京都港区三田','沿線・駅':'詳細はお問い合わせください','間取り・面積':'詳細はお問い合わせください',
+   'ひとこと':'募集の準備を進めております。詳しい条件が決まり次第ご案内いたします。','写真URL':'','SUUMOのURL':''},
+  {'掲載':'○','ラベル':'フルリノベ','物件名':'チュリス赤坂','価格':'70万円',
+   '所在地':'東京都港区赤坂2','沿線・駅':'東京メトロ銀座線「溜池山王」駅 徒歩2分','間取り・面積':'2SLDK／114.44㎡',
+   'ひとこと':'新耐震基準・内装フルリフォーム・建築家『黒川紀章』氏設計。管理費20,000円／即入居可。',
+   '写真URL':'https://img01.suumo.com/front/gazo/fr/bukken/391/100534838391/100534838391_go.jpg',
+   'SUUMOのURL':'https://suumo.jp/chintai/bc_100534838391/'},
+  {'掲載':'○','ラベル':'','物件名':'タウンシップ豊玉','価格':'',
+   '所在地':'東京都練馬区豊玉','沿線・駅':'詳細はアットホームの掲載ページをご覧ください','間取り・面積':'詳細はアットホームの掲載ページをご覧ください',
+   'ひとこと':'','写真URL':'','SUUMOのURL':'','アットホームのURL':'#'},
+];
+// 表示順（ここに無い物件は後ろに並びます）
+const PK_ORDER=['三田ガーデン','チュリス赤坂','タウンシップ豊玉'];
+const pkRank=n=>{const i=PK_ORDER.findIndex(k=>n.includes(k));return i<0?99:i};
 const pkRender=(list,note)=>{let items=list.filter(p=>p['物件名']&&isOn(p['掲載']));
+  items=[...items,...PK_EXTRA.filter(x=>!items.some(p=>p['物件名'].includes(x['物件名'].slice(0,4))))].map((p,i)=>[p,i]).sort((a,b)=>pkRank(a[0]['物件名'])-pkRank(b[0]['物件名'])||a[1]-b[1]).map(a=>a[0]);
   if(PK_DUMMY&&items.length){const i=Math.max(0,items.findIndex(p=>/チュリス赤坂/.test(p['物件名'])));
     items=[...items.slice(0,i+1),{...items[i],'SUUMOのURL':''},...items.slice(i+1)]}
   pkRail.removeAttribute('aria-busy');
